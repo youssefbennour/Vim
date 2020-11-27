@@ -1,4 +1,5 @@
 source $VIMRUNTIME/vimrc_example.vim
+
 let mapleader = ","
 
 au GUIEnter * simalt ~x
@@ -28,11 +29,10 @@ set linespace=4
 set hls
 set is
 set cb=unnamed
-set gfn=Consolas:h15
+set gfn=FixedsysTTF:h15
 set ts=4
 set sw=4
 set si
-cd C:\Users\Dell_Pc\Documents\vimws
 
 inoremap { {}<Left>
 inoremap {<CR> {<CR>}<Esc>O
@@ -40,10 +40,20 @@ inoremap {{ {
 inoremap {} {}
 inoremap ( ()<left>
 inoremap [ []<left>
+inoremap " ""<left>
+inoremap ' ''<left>
+
 
 autocmd filetype cpp nnoremap <F9> :w <bar> !g++ -std=c++14 % -o %:r -Wl,--stack,268435456<CR>
 autocmd filetype cpp nnoremap <F10> :!%:r<CR>
 autocmd filetype cpp nnoremap <C-C> :s/^\(\s*\)/\1\/\/<CR> :s/^\(\s*\)\/\/\/\//\1<CR> $
+
+
+
+autocmd filetype python nnoremap <f5> :w <bar> :!python3.9 % <cr>
+set pythonthreehome=C:\python39\
+set pythonthreedll=C:\Python39\python39.dll
+
 
 set nu
 augroup numbertoggle
@@ -90,7 +100,7 @@ endfunction
 
 
 " Specify a directory for plugins
-" - For Neovim: stdpath('data') . '/plugged'
+" - For Neovim stdpath('data') . '/plugged'
 " - Avoid using standard Vim directory names like 'plugin'
 call plug#begin('~/.vim/plugged')
 
@@ -112,4 +122,31 @@ Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 " Initialize plugin system
 call plug#end()
 
-colorscheme base16-atelier-dune-light 
+"This is for zoom in and zoom out"
+
+let s:pattern = '^\(.* \)\([1-9][0-9]*\)$'
+let s:minfontsize = 6
+let s:maxfontsize = 16
+function! AdjustFontSize(amount)
+  if has("gui_gtk2") && has("gui_running")
+    let fontname = substitute(&guifont, s:pattern, '\1', '')
+    let cursize = substitute(&guifont, s:pattern, '\2', '')
+    let newsize = cursize + a:amount
+    if (newsize >= s:minfontsize) && (newsize <= s:maxfontsize)
+      let newfont = fontname . newsize
+      let &guifont = newfont
+    endif
+  else
+    echoerr "You need to run the GTK2 version of Vim to use this function."
+  endif
+endfunction
+
+function! LargerFont()
+  call AdjustFontSize(1)
+endfunction
+command! LargerFont call LargerFont()
+
+function! SmallerFont()
+  call AdjustFontSize(-1)
+endfunction
+command! SmallerFont call SmallerFont()
