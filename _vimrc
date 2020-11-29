@@ -1,7 +1,5 @@
+"There are too much crap in my vimrc that I don't use
 source $VIMRUNTIME/vimrc_example.vim
-
-
-nnoremap <leader>1 1gt
 
 au GUIEnter * simalt ~x
 
