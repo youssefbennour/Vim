@@ -1,6 +1,7 @@
 source $VIMRUNTIME/vimrc_example.vim
 
-let mapleader = ","
+
+nnoremap <leader>1 1gt
 
 au GUIEnter * simalt ~x
 
@@ -10,7 +11,10 @@ set number
 map <F11> <Esc>:call libcallnr("gvimfullscreen.dll", "ToggleFullScreen", 0)<CR>
 
 " Mapping to reload configuration
-nmap <leader>so : source $HOME\_vimrc<CR>
+nnoremap so : source $HOME\_vimrc<CR>
+nnoremap tn :tabnew<CR>
+nnoremap tk  :tabnext<CR>
+
 
 set guioptions-=m  "menu bar
 set guioptions-=T  "toolbar
@@ -29,7 +33,7 @@ set linespace=4
 set hls
 set is
 set cb=unnamed
-set gfn=FixedsysTTF:h15
+set gfn=@Fixedsys:h16
 set ts=4
 set sw=4
 set si
@@ -49,10 +53,10 @@ autocmd filetype cpp nnoremap <F10> :!%:r<CR>
 autocmd filetype cpp nnoremap <C-C> :s/^\(\s*\)/\1\/\/<CR> :s/^\(\s*\)\/\/\/\//\1<CR> $
 
 
-
-autocmd filetype python nnoremap <f5> :w <bar> :!python3.9 % <cr>
 set pythonthreehome=C:\python39\
 set pythonthreedll=C:\Python39\python39.dll
+autocmd filetype python nnoremap <f5> :w <bar> :!python % <cr>
+
 
 
 set nu
@@ -63,7 +67,7 @@ augroup numbertoggle
 augroup END
 
 set diffexpr=MyDiff()
-function MyDiff()
+function! MyDiff()
 	let opt = '-a --binary '
 	if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
 	if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
@@ -105,7 +109,7 @@ endfunction
 call plug#begin('~/.vim/plugged')
 
 " Colorscheme
-Plug 'chriskempson/base16-vim'
+"Plug 'chriskempson/base16-vim'
 
 " customize footer
 Plug 'itchyny/lightline.vim'
@@ -121,32 +125,3 @@ Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 
 " Initialize plugin system
 call plug#end()
-
-"This is for zoom in and zoom out"
-
-let s:pattern = '^\(.* \)\([1-9][0-9]*\)$'
-let s:minfontsize = 6
-let s:maxfontsize = 16
-function! AdjustFontSize(amount)
-  if has("gui_gtk2") && has("gui_running")
-    let fontname = substitute(&guifont, s:pattern, '\1', '')
-    let cursize = substitute(&guifont, s:pattern, '\2', '')
-    let newsize = cursize + a:amount
-    if (newsize >= s:minfontsize) && (newsize <= s:maxfontsize)
-      let newfont = fontname . newsize
-      let &guifont = newfont
-    endif
-  else
-    echoerr "You need to run the GTK2 version of Vim to use this function."
-  endif
-endfunction
-
-function! LargerFont()
-  call AdjustFontSize(1)
-endfunction
-command! LargerFont call LargerFont()
-
-function! SmallerFont()
-  call AdjustFontSize(-1)
-endfunction
-command! SmallerFont call SmallerFont()
