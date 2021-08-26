@@ -1,31 +1,20 @@
-"There are too much crap in my vimrc that I don't use
+syntax on
 source $VIMRUNTIME/vimrc_example.vim
 
 au GUIEnter * simalt ~x
-
-set relativenumber
-set number
-
-map <F11> <Esc>:call libcallnr("gvimfullscreen.dll", "ToggleFullScreen", 0)<CR>
 
 " Mapping to reload configuration
 nnoremap so : source $HOME\_vimrc<CR>
 nnoremap tn :tabnew<CR>
 nnoremap tk  :tabnext<CR>
 
-
+set nocompatible
 set guioptions-=m  "menu bar
 set guioptions-=T  "toolbar
 set guioptions-=r  "scrollbar
-
-if !has('gui_running')
-  set t_Co=256
-endif
-
-let g:lightline = {
-      \ 'colorscheme': 'wombat',
-      \ }
-
+set relativenumber
+set number
+set encoding=UTF-8
 set laststatus=2
 set linespace=4
 set hls
@@ -35,6 +24,26 @@ set gfn=@Fixedsys:h16
 set ts=4
 set sw=4
 set si
+set et
+set ai
+set mouse=a
+set hidden
+set ignorecase
+set smartcase
+
+set pythonthreehome=C:/Users/Dell_Pc/AppData/Local/Programs/Python/Python39
+set pythonthreedll=python39.dll
+
+autocmd FileType python map <buffer> <F9> :w<CR>:exec '!python3' shellescape(@%, 1)<CR>
+autocmd FileType python imap <buffer> <F9> <esc>:w<CR>:exec '!python3' shellescape(@%, 1)<CR>
+
+if !has('gui_running')
+  set t_Co=256
+endif
+
+let g:lightline = {
+      \ 'colorscheme': 'wombat',
+      \ }
 
 inoremap { {}<Left>
 inoremap {<CR> {<CR>}<Esc>O
@@ -45,16 +54,14 @@ inoremap [ []<left>
 inoremap " ""<left>
 inoremap ' ''<left>
 
-
+"compile and run for c++
 autocmd filetype cpp nnoremap <F9> :w <bar> !g++ -std=c++14 % -o %:r -Wl,--stack,268435456<CR>
 autocmd filetype cpp nnoremap <F10> :!%:r<CR>
 autocmd filetype cpp nnoremap <C-C> :s/^\(\s*\)/\1\/\/<CR> :s/^\(\s*\)\/\/\/\//\1<CR> $
-
-
-set pythonthreehome=C:\python39\
-set pythonthreedll=C:\Python39\python39.dll
-autocmd filetype python nnoremap <f5> :w <bar> :!python % <cr>
-
+"compile and run for c
+autocmd filetype c nnoremap <F9> :w <bar> !gcc % -o %:r -Wl,--stack,268435456<CR>
+autocmd filetype c nnoremap <F10> :!%:r<CR>
+autocmd filetype c nnoremap <C-C> :s/^\(\s*\)/\1\/\/<CR> :s/^\(\s*\)\/\/\/\//\1<CR> $
 
 
 set nu
@@ -98,16 +105,14 @@ function! MyDiff()
 	endif
 endfunction
 
-
-
-
-" Specify a directory for plugins
-" - For Neovim stdpath('data') . '/plugged'
-" - Avoid using standard Vim directory names like 'plugin'
 call plug#begin('~/.vim/plugged')
 
 " Colorscheme
-"Plug 'chriskempson/base16-vim'
+Plug 'chriskempson/base16-vim'
+Plug 'sickill/vim-monokai'
+
+"light line them
+ Plug 'itchyny/lightline.vim'
 
 " customize footer
 Plug 'itchyny/lightline.vim'
@@ -115,11 +120,20 @@ Plug 'itchyny/lightline.vim'
 " Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
 Plug 'junegunn/vim-easy-align'
 
-" Multiple Plug commands can be written in a single line using | separators
-" Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+"Navigation
+Plug 'preservim/nerdtree'
 
 " On-demand loading
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 
-" Initialize plugin system
+" highlight python code
+Plug 'vim-python/python-syntax'
+
+" airline
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 call plug#end()
+let g:airline_powerline_fonts = 1
+let g:airline_theme='jellybeans'
+let g:python_highlight_all = 1
+colorscheme  base16-gruvbox-dark-hard 
